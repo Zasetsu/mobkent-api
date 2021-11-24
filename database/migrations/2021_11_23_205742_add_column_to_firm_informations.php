@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTypeToUsersTable extends Migration
+class AddColumnToFirmInformations extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddTypeToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->integer('type');
+        Schema::table('firm_informations', function (Blueprint $table) {
+            //
+            $table->integer('firm_id')->unsigned()->nullable();
         });
     }
 
@@ -25,9 +26,9 @@ class AddTypeToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('firm_informations', function (Blueprint $table) {
             //
-            $table->dropColumn('type');
+            $table->dropColumn('firm_id');
         });
     }
 }

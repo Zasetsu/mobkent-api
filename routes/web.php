@@ -16,10 +16,24 @@
 $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('il-getir', 'HelperController@cities');
     $router->post('ilce-getir', 'HelperController@towns');
+    $router->get('kategoriler', 'CategoriesController@all');
+    $router->get('kategoriler', 'CategoriesController@all');
+    $router->post('register/producer', 'ProducerController@register');
 
-    $router->post('register', 'ProducerController@register');
+    $router->post('product/add', 'ProductController@create');
+    $router->post('register/store', 'FirmController@register');
     $router->post('login', 'AccountController@login');
     $router->post('account/profile', 'AccountController@profile');
+        $router->get('account/all-producers', 'AccountController@allProducers');
+
+        $router->post('account/other-profile', 'AccountController@otherProfile');
+
+        $router->post('product/user-products', 'ProductController@userProducts');
+
+        $router->get('product/all-products', 'ProductController@allProducts');
+                $router->post('product/detail', 'ProductController@details');
+
+
 });
 
 

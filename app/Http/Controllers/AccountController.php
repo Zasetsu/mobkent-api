@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+use  Illuminate\Support\Facades\Auth;
 
+use App\Models\FirmInformations;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
-use  Illuminate\Support\Facades\Auth;
 use Validator;
 
 class AccountController extends Controller
@@ -43,20 +45,142 @@ class AccountController extends Controller
     public function profile()
     {
         $User = User::where('id', Auth::user()->id)->first();
+        $FirmInformation = FirmInformations::where('firm_id', Auth::user()->id)->first();
 
-        $data = [
-            "id" => $User->id,
-            "email" => $User->email,
-            "name" => $User->name,
-            "logo" => $User->logo,
-            "city" => $User->city,
-            "town" => $User->town,
-            "whatsapp" => $User->whatsapp,
-            "phone" => $User->phone,
-            "coordinates" => $User->coordinates,
-            "type" => $User->type == 0 ? 'Üretici' : 'Mağaza',
-        ];
+        if ($User->type == 0) {
+            $data = [
+                "id" => $User->id,
+                "email" => $User->email,
+                "type" => $User->type == 0 ? 'Üretici' : 'Mağaza',
+                "informations" => [
+                    'logo' => $FirmInformation->logo,
+                    'name' => $FirmInformation->name,
+                    'city' => $FirmInformation->city,
+                    'town' => $FirmInformation->town,
+                    'whatsapp' => $FirmInformation->whatsapp,
+                    'phone' => $FirmInformation->phone,
+                    'lat' => $FirmInformation->lat,
+                    'lang' => $FirmInformation->lang,
+                    'area' => $FirmInformation->area,
+                    'capacity' => $FirmInformation->capacity,
+                    'productionTypes' => unserialize($FirmInformation->productionTypes),
+                    'market' => unserialize($FirmInformation->market),
+                    'about' => $FirmInformation->about,
+                    'address' => $FirmInformation->address,
+                ]
+            ];
+        } else {
+            $data = [
+                "id" => $User->id,
+                "email" => $User->email,
+                "type" => $User->type == 0 ? 'Üretici' : 'Mağaza',
+                "informations" => [
+                    'logo' => $FirmInformation->logo,
+                    'name' => $FirmInformation->name,
+                    'city' => $FirmInformation->city,
+                    'town' => $FirmInformation->town,
+                    'whatsapp' => $FirmInformation->whatsapp,
+                    'phone' => $FirmInformation->phone,
+                    'lat' => $FirmInformation->lat,
+                    'lang' => $FirmInformation->lang,
+                    'storeAmount' => $FirmInformation->storeAmount,
+                    'storeArea' => $FirmInformation->storeArea,
+                    'productTypes' => unserialize($FirmInformation->productTypes),
+                    'partners' => unserialize($FirmInformation->partners),
+                    'about' => $FirmInformation->about,
+                    'address' => $FirmInformation->address,
+                ]
+            ];
+        }
 
         return response()->json(['success' => true, 'data' => $data], 200);
     }
+
+    public function otherProfile(Request $request)
+    {
+        $User = User::where('id', $request->id)->first();
+        $FirmInformation = FirmInformations::where('firm_id', $request->id)->first();
+
+        if ($User->type == 0) {
+            $data = [
+                "id" => $User->id,
+                "email" => $User->email,
+                "type" => $User->type == 0 ? 'Üretici' : 'Mağaza',
+                "informations" => [
+                    'logo' => $FirmInformation->logo,
+                    'name' => $FirmInformation->name,
+                    'city' => $FirmInformation->city,
+                    'town' => $FirmInformation->town,
+                    'whatsapp' => $FirmInformation->whatsapp,
+                    'phone' => $FirmInformation->phone,
+                    'lat' => $FirmInformation->lat,
+                    'lang' => $FirmInformation->lang,
+                    'area' => $FirmInformation->area,
+                    'capacity' => $FirmInformation->capacity,
+                    'productionTypes' => unserialize($FirmInformation->productionTypes),
+                    'market' => unserialize($FirmInformation->market),
+                    'about' => $FirmInformation->about,
+                    'address' => $FirmInformation->address,
+                ]
+            ];
+        } else {
+            $data = [
+                "id" => $User->id,
+                "email" => $User->email,
+                "type" => $User->type == 0 ? 'Üretici' : 'Mağaza',
+                "informations" => [
+                    'logo' => $FirmInformation->logo,
+                    'name' => $FirmInformation->name,
+                    'city' => $FirmInformation->city,
+                    'town' => $FirmInformation->town,
+                    'whatsapp' => $FirmInformation->whatsapp,
+                    'phone' => $FirmInformation->phone,
+                    'lat' => $FirmInformation->lat,
+                    'lang' => $FirmInformation->lang,
+                    'storeAmount' => $FirmInformation->storeAmount,
+                    'storeArea' => $FirmInformation->storeArea,
+                    'productTypes' => unserialize($FirmInformation->productTypes),
+                    'partners' => unserialize($FirmInformation->partners),
+                    'about' => $FirmInformation->about,
+                    'address' => $FirmInformation->address,
+                ]
+            ];
+        }
+
+        return response()->json(['success' => true, 'data' => $data], 200);
+    }
+
+    public function allProducers()
+    {
+        $data = array();
+        $Users = User::where('type', 0)->get();
+        foreach($Users as $User) {
+            $FirmInformation = FirmInformations::where('firm_id', $User->id)->first();
+                $info = [
+                "id" => $User->id,
+                "email" => $User->email,
+                "type" => $User->type == 0 ? 'Üretici' : 'Mağaza',
+                "informations" => [
+                    'logo' => $FirmInformation->logo,
+                    'name' => $FirmInformation->name,
+                    'city' => $FirmInformation->city,
+                    'town' => $FirmInformation->town,
+                    'whatsapp' => $FirmInformation->whatsapp,
+                    'phone' => $FirmInformation->phone,
+                    'lat' => $FirmInformation->lat,
+                    'lang' => $FirmInformation->lang,
+                    'area' => $FirmInformation->area,
+                    'capacity' => $FirmInformation->capacity,
+                    'productionTypes' => unserialize($FirmInformation->productionTypes),
+                    'market' => unserialize($FirmInformation->market),
+                    'about' => $FirmInformation->about,
+                    'address' => $FirmInformation->address,
+                ]
+            ];
+                array_push($data, $info);
+        }
+
+        return response()->json(['success' => true, 'data' => $data], 200);
+    }
+
 }
