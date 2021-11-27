@@ -161,7 +161,7 @@ class AccountController extends Controller
                 "email" => $User->email,
                 "type" => $User->type == 0 ? 'Üretici' : 'Mağaza',
                 "informations" => [
-                    'logo' => $FirmInformation->logo,
+                    'logo' => $FirmInformation->logo ? $FirmInformation->logo : '',
                     'name' => $FirmInformation->name,
                     'city' => $FirmInformation->city,
                     'town' => $FirmInformation->town,
